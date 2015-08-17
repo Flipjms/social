@@ -1,0 +1,29 @@
+{
+    "name": "clumsy/social",
+    "description": "A library to import data from Social networks",
+    "authors": [
+        {
+            "name": "Filipe Santos",
+            "email": "flipjms@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "clumsy/cms": "dev-master",
+        "facebook/php-sdk-v4" : "~5.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Clumsy\\Social\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.0.1-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}
