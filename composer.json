@@ -9,7 +9,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "clumsy/cms": "dev-master",
+        "clumsy/cms": "@dev",
         "facebook/php-sdk-v4" : "~5.0"
     },
     "autoload": {
@@ -22,7 +22,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1.0-dev"
+            "dev-master": "0.1.1-dev"
         }
     },
     "minimum-stability": "dev"
