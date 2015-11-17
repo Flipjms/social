@@ -17,8 +17,8 @@ return array(
      |
      */
 
-    'facebook_app_id' => '1484523581875872',
-    'facebook_app_secret' => '9d5cd47d345e3778facb35c8e16b691d',
+    'facebook_app_id' => '',
+    'facebook_app_secret' => '',
 
-    'facebook_ids' => '181224488590702', //Can be an array,ids of users,pages,whatever
+    'facebook_ids' => '', //Can be an array,ids of users,pages,whatever
 );
