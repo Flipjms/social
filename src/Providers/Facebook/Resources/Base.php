@@ -1,4 +1,6 @@
-<?php namespace Clumsy\Social\Providers\Facebook\Resources;
+<?php
+
+namespace Clumsy\Social\Providers\Facebook\Resources;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -12,7 +14,8 @@ use Facebook\FacebookApp as FbApp;
 use Facebook\FacebookRequest as FbRequest;
 use Facebook\Exceptions\FacebookResponseException as FbRespException;
 
-abstract class Base{
+abstract class Base
+{
 
     protected $fb;
     protected $fbApp;
@@ -26,6 +29,10 @@ abstract class Base{
 
     public function __construct()
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $arguments = func_get_args();
 
         $this->app_id = array_shift($arguments);
@@ -45,10 +52,6 @@ abstract class Base{
         }
 
         $this->params = $arguments;
-
-        if (!isset($_SESSION)) { 
-            session_start(); 
-        }
     }
 
     protected function getAccessTokenType()
@@ -64,16 +67,15 @@ abstract class Base{
                 if ($this->accessToken == '') {
                     try {
                         $accessToken = $this->fb->getRedirectLoginHelper()->getAccessToken();
-                    } catch(FbRespException $e) {
-                       return Redirect::to($this->getRedirectLoginHelper()->getReAuthenticationUrl($this->redirect_to));
+                    } catch (FbRespException $e) {
+                        return redirect($this->getRedirectLoginHelper()->getReAuthenticationUrl($this->redirect_to));
                     }
 
                     if ($accessToken != null) {
                         $this->saveToken($accessToken);
                         $this->accessToken = $accessToken;
-                    }
-                    else{
-                        return Redirect::to($this->loginUrl($this->redirect_to,$this->permissions));
+                    } else {
+                        return redirect($this->loginUrl($this->redirect_to, $this->permissions));
                     }
                 }
                 break;
@@ -94,7 +96,7 @@ abstract class Base{
 
     protected function getAccessToken()
     {
-        return Session::get('clumsy.fb-access-token',function(){
+        return session()->get('clumsy.fb-access-token', function () {
             $fb_tokens = DB::table('social_access_tokens')->get();
 
             $now = Carbon::now();
@@ -102,42 +104,39 @@ abstract class Base{
                 $date = Carbon::parse($token->expiration_date);
 
                 if ($date->lt($now)) {
-                    DB::table('social_access_tokens')->where('id','=',$token->id)->delete();
-                }
-                else{
-                    Session::put('clumsy.fb-access-token',$token->access_token);
+                    DB::table('social_access_tokens')->where('id', '=', $token->id)->delete();
+                } else {
+                    session()->put('clumsy.fb-access-token', $token->access_token);
                     return $token->access_token;
                 }
             }
 
             return '';
-
         });
     }
 
-	protected function loginUrl($url,$permissions = array())
-	{
+    protected function loginUrl($url, $permissions = array())
+    {
         $helper = $this->getRedirectLoginHelper();
-        return $helper->getLoginUrl($url,$permissions);
-	}
+        return $helper->getLoginUrl($url, $permissions);
+    }
 
-	public function saveToken($accessToken)
-	{		
+    public function saveToken($accessToken)
+    {
         DB::table('social_access_tokens')->insert(array(
                 'service'         => 'facebook',
                 'access_token'    => $accessToken->getValue(),
                 'expiration_date' => $accessToken->getExpiresAt(),
                 'created_at'      => date("Y-m-d H:i:s"),
                 'updated_at'      => date("Y-m-d H:i:s"),
-            )
-        );
+            ));
 
-        Session::put('clumsy.fb-access-token',$accessToken->getValue());
-	}
+        session()->put('clumsy.fb-access-token', $accessToken->getValue());
+    }
 
     public function getRequest()
     {
-        return $this->fb->sendRequest('GET',$this->endpoint,(array)$this->fields);
+        return $this->fb->sendRequest('GET', $this->endpoint, (array)$this->fields);
     }
 
     public function importPrivate($token_type)
@@ -147,8 +146,7 @@ abstract class Base{
         if ($accessToken instanceof SymfonyResponse) {
             return $accessToken;
         }
-
-        Session::put('clumsy.attempted-private-import', true);
+        session()->put('clumsy.attempted-private-import', true);
 
         return $this->import();
     }
@@ -156,36 +154,30 @@ abstract class Base{
     public function import()
     {
         if ($this->access_token_type && !$this->accessToken) {
-
             return $this->importPrivate($this->access_token_type);
         }
-
         try {
             $response = $this->getRequest();
-        } catch(\Exception $e) {
-
+        } catch (\Exception $e) {
             if ($e instanceof \Facebook\Exceptions\FacebookResponseException) {
-                DB::table('social_access_tokens')->where('access_token','=',$this->accessToken)->delete();
-                Session::forget('clumsy.fb-access-token');
+                DB::table('social_access_tokens')->where('access_token', '=', $this->accessToken)->delete();
+                session()->forget('clumsy.fb-access-token');
             }
 
-            if (!Session::has('clumsy.attempted-private-import')) {
+            if (!session()->has('clumsy.attempted-private-import')) {
                 return $this->importPrivate($this->getAccessTokenType());
             }
 
-            Session::forget('clumsy.attempted-private-import');
-
+            session()->forget('clumsy.attempted-private-import');
             return new \Illuminate\Support\MessageBag(
-                    array(
+                array(
                         'error' => 'Não foi possível aceder ao facebook! Tente novamente mais tarde...',
                     )
-                );
+            );
         }
+        session()->forget('clumsy.attempted-private-import');
 
-        Session::forget('clumsy.attempted-private-import');
-
-        if ($response instanceof \Illuminate\Support\MessageBag)
-        {
+        if ($response instanceof \Illuminate\Support\MessageBag) {
             return $response;
         }
 

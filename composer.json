@@ -1,6 +1,8 @@
 {
     "name": "clumsy/social",
     "description": "A library to import data from Social networks",
+    "keywords": ["laravel", "cms", "social", "facebook"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Filipe Santos",
@@ -16,13 +18,13 @@
         "classmap": [
             "src/migrations"
         ],
-        "psr-0": {
+        "psr-4": {
             "Clumsy\\Social\\": "src/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1.2-dev"
+            "dev-master": "0.2.0-dev"
         }
     },
     "minimum-stability": "dev"
