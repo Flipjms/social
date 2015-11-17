@@ -22,7 +22,7 @@ class SocialServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/config/config.php', 'clumsy/social');
+        $this->mergeConfigFrom(__DIR__.'/config/config.php', 'clumsy.social');
     }
 
     /**
@@ -33,7 +33,7 @@ class SocialServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/config.php'  => config_path('vendor/clumsy/social/config.php'),
+            __DIR__.'/config/config.php' => config_path('clumsy/social.php'),
         ], 'config');
 
         // Register artisan commands:
