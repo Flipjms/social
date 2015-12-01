@@ -4,7 +4,6 @@ use Clumsy\Social\Providers\Facebook\Resources\PageLikes;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 class UpdateLikes extends Command
 {
@@ -42,7 +41,6 @@ class UpdateLikes extends Command
     {
         $fb_app_id = $this->option('app_id');
         $fb_app_secret = $this->option('app_secret');
-        $redirect_to = null;
         $pageIds = $this->option('page_id');
         $fields = array('fields' => 'likes');
 

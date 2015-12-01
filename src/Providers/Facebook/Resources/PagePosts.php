@@ -1,10 +1,13 @@
-<?php namespace Clumsy\Social\Providers\Facebook\Resources;
+<?php
+
+namespace Clumsy\Social\Providers\Facebook\Resources;
 
 use Clumsy\Eminem\Models\Media;
 use Clumsy\Social\Providers\Facebook\Models\PagePosts as FacebookPosts;
 use Illuminate\Support\Facades\File;
 
-class PagePosts extends Base{
+class PagePosts extends Base
+{
 
     public $endpoint;
     public $fields;
@@ -24,7 +27,6 @@ class PagePosts extends Base{
         $graphEdge = $response->getGraphEdge();
 
         foreach ($graphEdge as $graphNode) {
-
             $data = array(
                 'external_id'  => $graphNode->getField('id'),
                 'content'      => $graphNode->getField('message'),
@@ -38,18 +40,16 @@ class PagePosts extends Base{
 
             $model = FacebookPosts::firstOrNew(array_only($data, 'external_id'));
 
-            if (!$model->exists)
-            {
+            if (!$model->exists) {
                 $model = $model->create($data);
-        
+
                 $imageLink = $graphNode->getField('full_picture');
 
-                if ($imageLink != null) {
-
+                if ($imageLink !== null) {
                     Media::create(array(
                         'path_type' => 'external',
                         'path'      => $imageLink,
-                        'mime_type' => 'image/'.substr(File::extension($imageLink),0,3),
+                        'mime_type' => 'image/'.substr(File::extension($imageLink), 0, 3),
                     ))
                     ->bind(array(
                         'association_type' => 'FacebookPost',
@@ -57,9 +57,7 @@ class PagePosts extends Base{
                         'position'         => 'image',
                     ));
                 }
-            }
-            else
-            {
+            } else {
                 $data['id'] = $model->id;
                 $model->update($data);
             }
