@@ -6,7 +6,6 @@ use Clumsy\Social\Providers\Facebook\Resources\PagePosts;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 class UpdatePosts extends Command {
 
@@ -45,9 +44,9 @@ class UpdatePosts extends Command {
 		$fb_app_secret = Config::get('clumsy/social::facebook_app_secret');
 
         $model = $this->option('model');
-        if ($model == null) {
+        if ($model === null) {
             $this->error('No page model was given...');
-            die();
+            return;
         }
 
         $page = new $model();

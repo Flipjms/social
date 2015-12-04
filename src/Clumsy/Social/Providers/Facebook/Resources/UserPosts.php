@@ -1,8 +1,9 @@
-<?php namespace Clumsy\Social\Providers\Facebook\Resources;
+<?php
 
-use Clumsy\Social\Providers\Facebook\Models\UserPosts as FacebookPosts;
+namespace Clumsy\Social\Providers\Facebook\Resources;
 
-class UserPosts extends Base{
+class UserPosts extends Base
+{
 
     protected $access_token_type = 'user';
 
@@ -10,7 +11,7 @@ class UserPosts extends Base{
     public $fields;
     public $permissions;
 
-    public function __construct($app_id,$app_secret,$redirect_to,$params = null)
+    public function __construct($app_id, $app_secret, $redirect_to, $params = null)
     {
         call_user_func_array(array('parent', '__construct'), func_get_args());
 

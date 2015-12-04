@@ -1,15 +1,12 @@
 <?php namespace Clumsy\Social\Providers\Facebook\Resources;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 use Facebook\Facebook as Fb;
-use Facebook\FacebookApp as FbApp;
-use Facebook\FacebookRequest as FbRequest;
 use Facebook\Exceptions\FacebookResponseException as FbRespException;
 
 abstract class Base
@@ -69,7 +66,7 @@ abstract class Base
                         return Redirect::to($this->getRedirectLoginHelper()->getReAuthenticationUrl($this->redirect_to));
                     }
 
-                    if ($accessToken != null) {
+                    if ($accessToken !== null) {
                         $this->saveToken($accessToken);
                         $this->accessToken = $accessToken;
                     } else {

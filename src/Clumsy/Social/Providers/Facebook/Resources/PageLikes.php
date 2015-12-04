@@ -1,8 +1,11 @@
-<?php namespace Clumsy\Social\Providers\Facebook\Resources;
+<?php
+
+namespace Clumsy\Social\Providers\Facebook\Resources;
 
 use Illuminate\Support\Facades\DB;
 
-class PageLikes extends Base{
+class PageLikes extends Base
+{
 
     public $endpoint;
     public $fields;

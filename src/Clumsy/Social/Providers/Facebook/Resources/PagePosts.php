@@ -41,10 +41,10 @@ class PagePosts extends Base{
             if (!$model->exists)
             {
                 $model = $model->create($data);
-        
+
                 $imageLink = $graphNode->getField('full_picture');
 
-                if ($imageLink != null) {
+                if ($imageLink !== null) {
 
                     Media::create(array(
                         'path_type' => 'external',
