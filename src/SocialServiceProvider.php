@@ -4,6 +4,7 @@ namespace Clumsy\Social;
 
 use Illuminate\Support\ServiceProvider;
 use Clumsy\Social\Providers\Facebook\Console\UpdateLikes;
+use Clumsy\Social\Providers\Facebook\Console\UpdatePosts;
 
 class SocialServiceProvider extends ServiceProvider
 {
@@ -42,6 +43,11 @@ class SocialServiceProvider extends ServiceProvider
                 return new UpdateLikes();
         });
         $this->commands('command.clumsy.social.updatelikes');
+
+        $this->app['command.clumsy.social.updateposts'] = $this->app->share(function ($app) {
+                return new UpdatePosts();
+        });
+        $this->commands('command.clumsy.social.updateposts');
     }
 
     /**

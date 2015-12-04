@@ -61,8 +61,8 @@ class UpdateLikes extends Command
     protected function getOptions()
     {
         return array(
-            array('app_id', null, InputOption::VALUE_OPTIONAL, 'Facebook App Id',config('clumsy/social.facebook_app_id')),
-            array('app_secret', null, InputOption::VALUE_OPTIONAL, 'Facebook App Secret',config('clumsy/social.facebook_app_secret')),
+            array('app_id', null, InputOption::VALUE_OPTIONAL, 'Facebook App Id',config('clumsy.social.facebook_app_id')),
+            array('app_secret', null, InputOption::VALUE_OPTIONAL, 'Facebook App Secret',config('clumsy.social.facebook_app_secret')),
             array('page_id', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Facebook Page Id(s)',(array) config('clumsy/social.facebook_ids')),
         );
     }
