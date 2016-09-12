@@ -37,6 +37,7 @@ abstract class Base
             array(
                 'app_id'      => $this->app_id,
                 'app_secret'  => $this->app_secret,
+                'default_graph_version' => 'v2.4',
             )
         );
 
